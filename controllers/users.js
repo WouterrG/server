@@ -1,5 +1,5 @@
-import User from "../models/User";
-import Wishlist from "../models/Wishlist";
+import User from "../models/User.js";
+import Wishlist from "../models/Wishlist.js";
 
 /* READ */
 export const getUser = async (req, res) => {
@@ -12,7 +12,7 @@ export const getUser = async (req, res) => {
   }
 };
 
-export const getUserFriend = async (req, res) => {
+export const getUserWishlists = async (req, res) => {
   try {
     const { id } = req.params;
     const user = await User.findByID(id);
@@ -47,6 +47,17 @@ export const addRemoveWishlist = async (req, res) => {
     }
     await user.save();
     await wishlist.save();
+
+    const wishlists = await Promise.all(
+      user.wishlists.map((id) => Wishlist.findById(id))
+    );
+
+    const formattedWishlists = wishlists.map(({ _id, listName }) => {
+      return { _id, listName };
+    });
+
+    res.status(200).json(formattedWishlists);
+
   } catch (err) {
     res.status(404).json({ message: err.message });
   }

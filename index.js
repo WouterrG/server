@@ -10,7 +10,13 @@ import path from "path";
 import { fileURLToPath } from "url";
 import authRoutes from "./routes/auth.js";
 import userRoutes from "./routes/users.js";
+import wishlistRoutes from "./routes/wishlists.js";
 import { register } from "./controllers/auth.js";
+import { createWishlist } from "./controllers/wishlists.js";
+import { verifyToken } from "./middleware/auth.js";
+import User from "./models/User.js";
+import Wishlist from "./models/Wishlist.js";
+import { users, wishlists } from "./data/index.js"
 
 /* CONFIGURATIONS */
 const __filename = fileURLToPath(import.meta.url);
@@ -39,10 +45,12 @@ const upload = multer({ storage });
 
 /* ROUTES WITH FILES */
 app.post("/auth/register", upload.single("picture"), register);
+app.post("/wishlists", verifyToken, upload.single("picture"), createWishlist)
 
 /* ROUTES */
 app.use("/auth", authRoutes);
 app.use("/user", userRoutes);
+app.use("/wishlists", wishlistRoutes);
 
 /* MONGOOSE SETUP */
 const PORT = process.env.PORT || 6001;
@@ -53,5 +61,9 @@ mongoose
   })
   .then(() => {
     app.listen(PORT, () => console.log(`Server Port: ${PORT}`));
+
+    // /* INJECT DUMMY DATA ONCE */
+    // User.insertMany(users);
+    // Wishlist.insertMany(wishlists)
   })
   .catch((error) => console.log(`${error} did not connect`));

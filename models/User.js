@@ -34,12 +34,6 @@ const UserSchema = new mongoose.Schema(
             type: Array,
             default: []
         },
-        wishlistPassword: {
-            type: String,
-            required: true,
-            max: 50,
-            min: 8,
-        },
     }, {timestamps: true}
 )
 
