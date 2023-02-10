@@ -16,7 +16,7 @@ import { createWishlist } from "./controllers/wishlists.js";
 import { verifyToken } from "./middleware/auth.js";
 import User from "./models/User.js";
 import Wishlist from "./models/Wishlist.js";
-import { users, wishlists } from "./data/index.js"
+import { users, wishlists } from "./data/index.js";
 
 /* CONFIGURATIONS */
 const __filename = fileURLToPath(import.meta.url);
@@ -45,7 +45,7 @@ const upload = multer({ storage });
 
 /* ROUTES WITH FILES */
 app.post("/auth/register", upload.single("picture"), register);
-app.post("/wishlists", verifyToken, upload.single("picture"), createWishlist)
+app.post("/wishlists", verifyToken, upload.single("picture"), createWishlist);
 
 /* ROUTES */
 app.use("/auth", authRoutes);

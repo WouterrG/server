@@ -57,7 +57,6 @@ export const addRemoveWishlist = async (req, res) => {
     });
 
     res.status(200).json(formattedWishlists);
-
   } catch (err) {
     res.status(404).json({ message: err.message });
   }
